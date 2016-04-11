@@ -32,7 +32,7 @@ public class FigureFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 stopActionPerformed(e);
             }
-
+//
         });
 
         addButton.addActionListener(new ActionListener() {
