@@ -5,10 +5,10 @@ import java.awt.*;
 /**
  * Created by Meruzhan on 07.04.2016.
  */
-public class Peg extends Figure {
+public class Peg extends FigureHanoi {
 
     public Peg(int x, int y, int width, int height, FigureCanvas canvas) {
-        super(x, y, width, height, canvas);
+        this(x, y, width, height, canvas,Color.green);
     }
 
     public Peg(int x, int y, int width, int height, FigureCanvas canvas, Color color) {

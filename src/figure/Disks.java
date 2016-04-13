@@ -2,13 +2,13 @@ package figure;
 
 import java.awt.*;
 
-public class Rectangle extends Figure {
+public class Disks extends FigureHanoi {
 
-    public Rectangle(int x, int y, int width, int height, FigureCanvas canvas) {
+    public Disks(int x, int y, int width, int height, FigureCanvas canvas) {
         this(x, y, width, height, canvas, Color.green);
     }
 
-    public Rectangle(int x, int y, int width, int height, FigureCanvas canvas, Color color) {
+    public Disks(int x, int y, int width, int height, FigureCanvas canvas, Color color) {
         super(x, y, width, height, canvas, color);
     }
 

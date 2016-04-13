@@ -8,7 +8,7 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 public class FigureCanvas extends JPanel {
-	private ArrayList<Figure> figures = new ArrayList<>();
+	private ArrayList<FigureHanoi> figures = new ArrayList<>();
 
 	private int mX;
 	private int mY;
@@ -59,15 +59,15 @@ public class FigureCanvas extends JPanel {
 
 	}
 
-	public void add(Figure figure) {
+	public void add(FigureHanoi figure) {
 
 	}
 
 
-	public Figure getSelected() {
+	public FigureHanoi getSelected() {
 		if (isSelected) {
 			int size = figures.size();
-			return size > 0 ? (Figure)figures.get(size - 1) : null;
+			return size > 0 ? (FigureHanoi) figures.get(size - 1) : null;
 		}
 		return null;
 	}
@@ -97,7 +97,7 @@ public class FigureCanvas extends JPanel {
 		int size = figures.size();
 		isSelected = false;
 		for (int i = size - 1; i >= 0; i--) {
-			Figure f = (Figure)figures.get(i);
+			FigureHanoi f = (FigureHanoi) figures.get(i);
 			if (f.isBelong(x, y)) {
 				figures.remove(f);
 				figures.add(f);
