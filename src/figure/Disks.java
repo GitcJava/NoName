@@ -4,17 +4,18 @@ import java.awt.*;
 
 public class Disks extends FigureHanoi {
 
-    public Disks(int x, int y, int width, int height, FigureCanvas canvas) {
+    public Disks(int x, int y, int width, int height, Canvas canvas) {
         this(x, y, width, height, canvas, Color.green);
     }
 
-    public Disks(int x, int y, int width, int height, FigureCanvas canvas, Color color) {
+    public Disks(int x, int y, int width, int height, Canvas canvas, Color color) {
         super(x, y, width, height, canvas, color);
     }
 
     @Override
     public void draw(Graphics g) {
-
+       g.setColor(getColor());
+        g.fillRoundRect(getX(),getY(),getWidth(),getHeight(),getHeight()/2,getHeight()/2);
     }
 
     @Override
