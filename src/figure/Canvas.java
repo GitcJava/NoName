@@ -1,5 +1,4 @@
 package figure;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -17,6 +16,18 @@ public class Canvas extends JPanel implements Runnable {
     private int disksize;
     private Thread t;
     private boolean isSelected;
+    private static final Cursor DEFAULT_CURSOR = new Cursor(Cursor.DEFAULT_CURSOR);
+    private static final Cursor LEFT_TOP_CORNER = new Cursor(Cursor.NE_RESIZE_CURSOR);
+    private static final Cursor VERTICAL = new Cursor(Cursor.S_RESIZE_CURSOR);
+    private static final Cursor RIGHT_TOP_CORNER = new Cursor(Cursor.SW_RESIZE_CURSOR);
+    private static final Cursor HORIZONTAL = new Cursor(Cursor.E_RESIZE_CURSOR);
+    private static final Cursor LEFT_NETHER_CORNER = new Cursor(Cursor.NW_RESIZE_CURSOR);
+    private static final Cursor RIGHT_NETHER_CORNER = new Cursor(Cursor.SE_RESIZE_CURSOR);
+    private boolean left;
+    private boolean right;
+    private boolean top;
+    private boolean botton;
+
 
     private Border border = new Border(10, 10, 1000, 600, Color.black);
 
@@ -76,13 +87,78 @@ public class Canvas extends JPanel implements Runnable {
             @Override
             public void mouseDragged(MouseEvent e) {
                 mouseDraggedPerformed(e);
+                transformBorder(e);
             }
 
             @Override
             public void mouseMoved(MouseEvent e) {
-
+                mouseMovedPerformed(e);
             }
         });
+
+    }
+
+    private void mouseMovedPerformed(MouseEvent e){
+        if(border.getTop()+3 >= e.getY()  && border.getTop()-3 <= e.getY() && border.getLeft()+5 < e.getX() && border.getRight()-5 > e.getX()){
+            setCursor(VERTICAL);
+            top = true;
+            left = false;
+            right = false;
+            botton = false;
+        }else if (border.getBotton() +3>=e.getY() && border.getBotton()-3 <= e.getY() && border.getLeft()+5 < e.getX() && border.getRight()-5 > e.getX()){
+            setCursor(VERTICAL);
+            top = false;
+            left = false;
+            right = false;
+            botton = true;
+
+        }else if (border.getLeft()+3 >= e.getX() && border.getLeft()-3 <= e.getX()&& border.getTop()+5 < e.getY() && border.getBotton()-5 > e.getY()){
+            setCursor(HORIZONTAL);
+            top = false;
+            left = true;
+            right = false;
+            botton = false;
+
+        }else if (border.getRight()+3 >= e.getX() && border.getRight()-3 <= e.getX() && border.getTop()+5 < e.getY() && border.getBotton()-5 > e.getY()){
+            setCursor(HORIZONTAL);
+            top = false;
+            left = false;
+            right = true;
+            botton = false;
+        }else if (border.getTop()+5 >= e.getY()  && border.getTop()-5 <= e.getY() && border.getLeft()+5 >= e.getX() && border.getLeft()- 5 <= e.getX()  ){
+            setCursor(LEFT_NETHER_CORNER);
+            top = true;
+            left = true;
+            right = false;
+            botton = false;
+
+        }else if (border.getLeft()+3 >= e.getX() && border.getLeft()-3 <= e.getX() && border.getBotton() +3>=e.getY() && border.getBotton()-3 <= e.getY()){
+            setCursor(LEFT_TOP_CORNER);
+            top = false;
+            left = true;
+            right = false;
+            botton = true;
+        }else if (border.getTop()+5 >= e.getY()  && border.getTop()-5 <= e.getY() && border.getRight()+3 >= e.getX() && border.getRight()-3 <= e.getX()){
+            setCursor(RIGHT_TOP_CORNER);
+            top = true;
+            left = false;
+            right = true;
+            botton = false;
+        }else if (border.getBotton() +3>=e.getY() && border.getBotton()-3 <= e.getY() && border.getRight()+3 >= e.getX() && border.getRight()-3 <= e.getX() ){
+            setCursor(RIGHT_NETHER_CORNER);
+            top = false;
+            left = false;
+            right = true;
+            botton = true;
+        }else{
+            setCursor(DEFAULT_CURSOR);
+            top = false;
+            left = false;
+            right = false;
+            botton = false;
+
+        }
+
 
     }
 
@@ -140,12 +216,80 @@ public class Canvas extends JPanel implements Runnable {
         update(getGraphics());
     }
 
+    private void transformBorder(MouseEvent e){
+        if(top && left){
+            transformTopLeftCorner(e);
+        }else if (top && right){
+            transformTopRightCorner(e);
+        } else if(botton && left){
+            transformBottonLeftCorner(e);
+        } else if (botton && right){
+            transformBottonRightCorner(e);
+        } else if (top){
+            transformTop(e);
+        } else if (left) {
+            transformLeft(e);
+
+        }else if (right){
+            transformRight(e);
+        }else if (botton){
+            transformBotton(e);
+        }
+
+
+    }
+
+    private void transformTopLeftCorner(MouseEvent e){
+        transformTop(e);
+        transformLeft(e);
+    }
+
+    private void transformTopRightCorner(MouseEvent e){
+        transformTop(e);
+        transformRight(e);
+    }
+
+    private void transformBottonLeftCorner(MouseEvent e){
+        transformBotton(e);
+        transformLeft(e);
+    }
+
+    private void transformBottonRightCorner(MouseEvent e){
+        transformBotton(e);
+        transformRight(e);
+    }
+
+    private void transformLeft(MouseEvent e){
+
+        border.setWidth(border.getWidth() + (border.getLeft()-e.getX())) ;
+        border.setX(e.getX());
+        update(getGraphics());
+    }
+
+    private void transformRight(MouseEvent e){
+        border.setWidth(border.getWidth() + (e.getX()- border.getRight()));
+        update(getGraphics());
+    }
+    private void transformTop(MouseEvent e){
+
+        border.setHeight(border.getHeight() + (border.getY()-e.getY()));
+        border.setY(e.getY());
+        update(getGraphics());
+    }
+
+    private  void transformBotton(MouseEvent e){
+        border.setHeight(border.getHeight() + (e.getY()- border.getBotton()));
+        update(getGraphics());
+    }
+
     private void mousePressedPerformed(MouseEvent e) {
         mX = e.getX();
         mY = e.getY();
         select(mX, mY);
         update(getGraphics());
     }
+
+
 
 
     private void select(int x, int y) {
@@ -171,7 +315,7 @@ public class Canvas extends JPanel implements Runnable {
             movedisk(n - 1, start, end, second);
             start.getEndDisc().discMove(start, end);
         }
-            movedisk(n - 1, second, start, end);
+        movedisk(n - 1, second, start, end);
     }
 
 

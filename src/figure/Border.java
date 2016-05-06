@@ -36,6 +36,12 @@ public class Border extends Figure {
 
 
     @Override
+    public void setHeight(int height) {
+        super.setHeight(height);
+    }
+
+
+    @Override
     public void draw(Graphics g) {
         g.setColor(getColor());
         g.fillRect(getX(),getY(),getWidth(),getHeight());
