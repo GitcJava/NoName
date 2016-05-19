@@ -12,10 +12,14 @@ public abstract class FigureHanoi extends Figure {
     private Canvas canvas;
     private Peg start;
     private Peg end;
-    private boolean isMove;
+    private int dX = 0;
+    private int dY = 0;
+    private MoveMode movingMode = MoveMode.DONE;
 
     public FigureHanoi(int x, int y, int width, int height, Canvas canvas) {
         this(x, y, width, height, canvas, Color.blue);
+
+
     }
 
     public FigureHanoi(int x, int y, int width, int height, Canvas canvas, Color color) {
@@ -23,57 +27,77 @@ public abstract class FigureHanoi extends Figure {
         this.canvas = canvas;
     }
 
-    public  void discMove(Peg start, Peg end) {
+    public void discMove(Peg start, Peg end) {
         this.start = start;
         this.end = end;
-        isMove =true;
         discMove();
 
     }
 
-    private void  discMove( ){
-        while (isMove){
-            nextUp();
-
-
-        }
-
-    }
-
-    private  void nextUp(){
-        while (isMove){
-            if(getY()+getHeight()<=start.getY()){
+    public void discMove() {
+        movingMode = MoveMode.UP;
+        while (canvas.isMove()) {
+            switch (movingMode) {
+                case UP:
+                    if (getY() + getHeight() <= start.getY() + 2) {
+                        movingMode = MoveMode.TO_NEXT_PEG;
+                    } else {
+                        dX = 0;
+                        dY = -1;
+                    }
+                    break;
+                case TO_NEXT_PEG:
+                    if (getX() + (getWidth() / 2) == end.getX() + (end.getWidth() / 2) && getY() + getHeight() == end.getY()) {
+                        movingMode = MoveMode.DOWN;
+                        end.getDisksArray().add(start.getDisksArray().remove(start.getDisksArray().size() - 1));
+                    } else {
+                        ensureDirection();
+                    }
+                    break;
+                case DOWN:
+                    if (isEndDisc() || getY() + getHeight() == end.getY() + end.getHeight() - 1) {
+                        movingMode = MoveMode.DONE;
+                    } else {
+                        dX = 0;
+                        dY = 1;
+                    }
+                    break;
+            }
+            if (!canvas.isMove() || movingMode == MoveMode.DONE) {
                 return;
             }
-               move(0,-1);
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                canvas.update(canvas.getGraphics());
+            move(dX, dY);
+            canvas.repaint();
+            try {
+                Thread.sleep(10);
 
-
-        }
-    }
-
-
-    private void nextDown(){
-        while (isMove){
-            if (this.getY()+this.getHeight()!=end.getY()+end.getHeight()-1||end.getEndDisc().getY()-1!=getY()+getHeight()){
-                move(0,1);
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                canvas.update(canvas.getGraphics());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-           return;
+
+
         }
+
     }
 
+    private void ensureDirection() {
+        dX = getX() + (getWidth() / 2) > end.getX() + (end.getWidth() / 2) ? -1 : getX() + (getWidth() / 2) < end.getX() + (end.getWidth() / 2) ? 1 : 0;
+        dY = getY() + getHeight() > end.getY() ? -1 : getY() + getHeight() < end.getY() ? 1 : 0;
+
+    }
+
+    private int sign(int x) {
+        return (x > 0) ? 1 : (x < 0) ? -1 : 0;
+    }
+
+    private boolean isEndDisc() {
+        if (end.getDisksArray().size() < 2) {
+            return false;
+        }
+        return end.getDisksArray().get(end.getDisksArray().size() - 2).getY() - 1 == getY() + getHeight();
+    }
+
+    enum MoveMode {DONE, UP, TO_NEXT_PEG, DOWN}
 
 
 }
