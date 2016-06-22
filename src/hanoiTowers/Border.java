@@ -1,4 +1,4 @@
-package figure;
+package hanoiTowers;
 
 import figures.Figure;
 

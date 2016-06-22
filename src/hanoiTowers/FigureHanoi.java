@@ -1,4 +1,4 @@
-package figure;
+package hanoiTowers;
 
 import figures.Figure;
 
@@ -49,7 +49,8 @@ public abstract class FigureHanoi extends Figure {
                 case TO_NEXT_PEG:
                     if (getX() + (getWidth() / 2) == end.getX() + (end.getWidth() / 2) && getY() + getHeight() == end.getY()) {
                         movingMode = MoveMode.DOWN;
-                        end.getDisksArray().add(start.getDisksArray().remove(start.getDisksArray().size() - 1));
+//                        end.getDisksArray().add(start.getDisksArray().remove(start.getDisksArray().size() - 1));
+                        end.getDisksArray().add(this);
                     } else {
                         ensureDirection();
                     }

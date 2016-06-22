@@ -20,7 +20,7 @@ public abstract class Figure implements Runnable {
 	private int dY;
 
 	private Thread t;
-	private FigureCanvas canvas;
+	protected FigureCanvas canvas;
 
 	private boolean isRunning;
 

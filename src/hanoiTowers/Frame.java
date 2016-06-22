@@ -1,4 +1,4 @@
-package figure;
+package hanoiTowers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,7 +41,7 @@ public class Frame extends JFrame {
 
         add(controlPanel, BorderLayout.NORTH);
         add(canvas, BorderLayout.CENTER);
-        setSize(1000, 700);
+        setSize(1040, 700);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
     }
